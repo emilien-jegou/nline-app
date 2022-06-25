@@ -1,4 +1,5 @@
-import type {Component} from 'solid-js';
+import type { Component } from 'solid-js';
+
 import { Canvas } from './modules/canvas';
 import { SettingsProvider } from './stores/settings';
 

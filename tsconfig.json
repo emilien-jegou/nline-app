@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "moduleResolution": "node",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",

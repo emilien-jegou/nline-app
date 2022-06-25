@@ -1,5 +1,7 @@
-const logFormat = (logFn: typeof console.log, namespace: string) => (message: string) => logFn(`[${namespace}] ${message}`);
+const logFormat = (logFunction: typeof console.log, namespace: string) => (message: string) =>
+  logFunction(`[${namespace}] ${message}`);
 
+/* eslint-disable no-console */
 export const useLogger = (namespace: string) => ({
   warn: logFormat(console.warn, namespace),
   debug: logFormat(console.debug, namespace),
@@ -7,3 +9,4 @@ export const useLogger = (namespace: string) => ({
   error: logFormat(console.error, namespace),
   info: logFormat(console.info, namespace),
 });
+/* eslint-enable no-console */

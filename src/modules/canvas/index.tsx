@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js';
-import { createSignal } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 import { MouseOverlay } from './components/MouseOverlay';
 import { OverlayEventHandler } from './common/overlay-event-handler';
@@ -8,9 +8,9 @@ import { Position } from './common/position';
 
 export const Canvas: Component = () => {
   const handler = OverlayEventHandler.create();
-  const [currentLine, setCurrentLine] = createSignal<Position[]>([]);
+  const [currentLine, setCurrentLine] = createStore<Position[]>([]);
 
-  handler.onMouseMove((position: Position) => setCurrentLine([...currentLine(), position]));
+  handler.onMouseMove((position: Position) => setCurrentLine([...currentLine, position]));
 
   return (
     <>
@@ -23,7 +23,7 @@ export const Canvas: Component = () => {
       </button>
       <MouseOverlay overlayEventHandler={handler}>
         <svg style={{ width: '100%', height: '100%' }}>
-          <Path points={() => currentLine()} />
+          <Path points={currentLine} />
         </svg>
       </MouseOverlay>
     </>

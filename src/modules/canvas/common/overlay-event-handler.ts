@@ -1,5 +1,5 @@
-import {Position} from './position';
-import {useLogger} from './logger';
+import { Position } from './position';
+import { useLogger } from './logger';
 
 type EventEffect = (position: Position) => void;
 type EventTypes = 'onClick' | 'onMouseMove';
@@ -10,11 +10,21 @@ export class OverlayEventHandler {
 
   static create = () => new OverlayEventHandler();
 
-  onClick(listener: EventEffect) {this.registerOnEvent('onClick', listener)}
-  sendClick(position: Position) {this.sendEvent('onClick', position)}
+  onClick(listener: EventEffect) {
+    this.registerOnEvent('onClick', listener);
+  }
 
-  onMouseMove(listener: EventEffect) {this.registerOnEvent('onMouseMove', listener)}
-  sendMouseMove(position: Position) {this.sendEvent('onMouseMove', position)}
+  sendClick(position: Position) {
+    this.sendEvent('onClick', position);
+  }
+
+  onMouseMove(listener: EventEffect) {
+    this.registerOnEvent('onMouseMove', listener);
+  }
+
+  sendMouseMove(position: Position) {
+    this.sendEvent('onMouseMove', position);
+  }
 
   private registerOnEvent(key: EventTypes, listener: EventEffect) {
     this.logger.debug(`new listener '${key}'`);
@@ -23,11 +33,10 @@ export class OverlayEventHandler {
     return () => {
       this.logger.debug(`destroying listener '${key}'`);
       if (this.listeners[key] === listener) this.listeners[key] = undefined;
-    }
+    };
   }
 
   private sendEvent(key: EventTypes, position: Position) {
     this.listeners[key]?.(position);
   }
-
-};
+}

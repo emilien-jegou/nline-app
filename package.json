@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
@@ -11,16 +12,32 @@
   "license": "MIT",
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
     "@unocss/preset-mini": "^0.34.0",
     "@unocss/vite": "^0.34.0",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-no-secrets": "^0.8.9",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-solid": "^0.7.0",
+    "eslint-plugin-sonarjs": "^0.13.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "eslint-plugin-write-good-comments": "^0.1.4",
+    "prettier": "^2.7.1",
     "typescript": "^4.6.4",
     "vite": "^2.9.9",
+    "vite-plugin-eslint": "^1.6.1",
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.1",
     "fp-ts": "^2.12.1",
     "fp-ts-contrib": "^0.1.29",
+    "localforage": "^1.10.0",
     "solid-js": "^1.4.2"
   }
 }

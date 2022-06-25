@@ -1,4 +1,3 @@
-
 export class Position {
   x: number;
   y: number;
@@ -9,4 +8,4 @@ export class Position {
   }
 
   static create = (x: number, y: number) => new Position(x, y);
-};
+}
