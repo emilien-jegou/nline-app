@@ -1,5 +1,5 @@
 import { Position } from './position';
-import { useLogger } from './logger';
+import { useLogger } from '../../../common/logger';
 
 type EventEffect = (position: Position) => void;
 type EventTypes = 'onClick' | 'onMouseMove';
