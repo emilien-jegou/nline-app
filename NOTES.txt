@@ -1,0 +1,33 @@
+
+General:
+ - commits need cleanup following unchecked fixups.
+ - rename path to stroke
+
+Debug mode:
+ - enable/disable debug mode button
+
+Shortcuts:
+ - create the shortcut class
+ - save settings on exit
+
+
+
+
+
+Low priority:
+ @ Stroke
+   - cursor size should follow the stroke size.
+   - stroke object needs to possess it's own stroke size
+   - find a non cubbersome way to modify the stroke size
+ @ Infinite canvas
+   - make the canvas infinite
+   - panning using space
+   - center back on screen
+ @ Zoom/unzoom
+   - implement zoom/unzoom logic
+ @ Grid
+   - grid on screen
+ @ Undo/Redo
+   - Create the undo/redo class
+   - Implement Ctrl-z
+   - Implement Ctrl-y
