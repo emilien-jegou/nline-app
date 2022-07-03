@@ -3,12 +3,18 @@ import { createStore } from 'solid-js/store';
 
 import { MouseOverlay } from './components/MouseOverlay';
 import { OverlayEventHandler } from './common/overlay-event-handler';
-import { Path } from './components/Path';
 import { Position } from './common/position';
+import { Canvas } from './common/canvas';
+import { Path } from './common/path';
 
-export const Canvas: Component = () => {
+const CanvasComponent: Component = () => {
   const handler = OverlayEventHandler.create();
   const [currentLine, setCurrentLine] = createStore<Position[]>([]);
+
+  const canvas = Canvas.create();
+  const path = Path.create(currentLine);
+
+  canvas.addEntity(path);
 
   handler.onMouseMove((position: Position) => setCurrentLine([...currentLine, position]));
 
@@ -22,10 +28,13 @@ export const Canvas: Component = () => {
         clear
       </button>
       <MouseOverlay overlayEventHandler={handler}>
-        <svg style={{ width: '100%', height: '100%' }}>
-          <Path points={currentLine} />
-        </svg>
+        <svg
+          ref={(element: SVGSVGElement) => canvas.setSVGElement(element)}
+          style={{ width: '100%', height: '100%' }}
+        />
       </MouseOverlay>
     </>
   );
 };
+
+export { CanvasComponent as Canvas };
