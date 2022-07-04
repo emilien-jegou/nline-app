@@ -1,7 +1,64 @@
 
+
 General:
+ - vite-checker typescript check goes in node_modules, see if there is any alternative to skipLibCheck
  - commits need cleanup following unchecked fixups.
- - rename path to stroke
+ - rename path to stroke?
+ - Check those line smoothing functions:
+ https://francoisromain.medium.com/smooth-a-svg-path-with-functional-programming-1b9876b8bf7e
+ https://francoisromain.medium.com/smooth-a-svg-path-with-cubic-bezier-curves-e37b49d46c74
+ OR
+```typescript
+/**
+* Takes three points and creates a smoother line based on them.
+* @function module:path.smoothControlPoints
+* @param {Point} ct1 - Object with x and y values (first control point)
+* @param {Point} ct2 - Object with x and y values (second control point)
+* @param {Point} pt - Object with x and y values (third point)
+* @returns {Point[]} Array of two "smoothed" point objects
+*/
+export const smoothControlPoints = (ct1, ct2, pt) => {
+  // each point must not be the origin
+  const x1 = ct1.x - pt.x
+  const y1 = ct1.y - pt.y
+  const x2 = ct2.x - pt.x
+  const y2 = ct2.y - pt.y
+
+  if ((x1 !== 0 || y1 !== 0) && (x2 !== 0 || y2 !== 0)) {
+    const
+      r1 = Math.sqrt(x1 * x1 + y1 * y1)
+    const r2 = Math.sqrt(x2 * x2 + y2 * y2)
+    const nct1 = svgCanvas.getSvgRoot().createSVGPoint()
+    const nct2 = svgCanvas.getSvgRoot().createSVGPoint()
+    let anglea = Math.atan2(y1, x1)
+    let angleb = Math.atan2(y2, x2)
+    if (anglea < 0) { anglea += 2 * Math.PI }
+    if (angleb < 0) { angleb += 2 * Math.PI }
+
+    const angleBetween = Math.abs(anglea - angleb)
+    const angleDiff = Math.abs(Math.PI - angleBetween) / 2
+
+    let newAnglea; let newAngleb
+    if (anglea - angleb > 0) {
+      newAnglea = angleBetween < Math.PI ? (anglea + angleDiff) : (anglea - angleDiff)
+      newAngleb = angleBetween < Math.PI ? (angleb - angleDiff) : (angleb + angleDiff)
+    } else {
+      newAnglea = angleBetween < Math.PI ? (anglea - angleDiff) : (anglea + angleDiff)
+      newAngleb = angleBetween < Math.PI ? (angleb + angleDiff) : (angleb - angleDiff)
+    }
+
+    // rotate the points
+    nct1.x = r1 * Math.cos(newAnglea) + pt.x
+    nct1.y = r1 * Math.sin(newAnglea) + pt.y
+    nct2.x = r2 * Math.cos(newAngleb) + pt.x
+    nct2.y = r2 * Math.sin(newAngleb) + pt.y
+
+    return [nct1, nct2]
+  }
+  return undefined
+}
+
+```
 
 Debug mode:
  - enable/disable debug mode button
