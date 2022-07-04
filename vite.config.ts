@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 import UnocssPlugin from '@unocss/vite';
-import eslint from 'vite-plugin-eslint';
+import checker from 'vite-plugin-checker';
 
 export default defineConfig({
   plugins: [
@@ -9,9 +9,21 @@ export default defineConfig({
     UnocssPlugin({
       // your config or in uno.config.ts
     }),
-    eslint({
-      include: /\.(jsx?|tsx?)$/,
-      fix: true,
+    checker({
+      typescript: true,
+      eslint: {
+        lintCommand: "eslint 'src/**/*.{ts,tsx,js,jsx}'",
+        dev: {
+          overrideConfig: {
+            overrideConfig: {
+              rules: {
+                'no-console': 1,
+              },
+            },
+          },
+          logLevel: ['error', 'warning'],
+        },
+      },
     }),
   ],
   build: {

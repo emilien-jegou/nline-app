@@ -30,7 +30,6 @@
     "prettier": "^2.7.1",
     "typescript": "^4.6.4",
     "vite": "^2.9.9",
-    "vite-plugin-eslint": "^1.6.1",
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
@@ -38,6 +37,7 @@
     "fp-ts": "^2.12.1",
     "fp-ts-contrib": "^0.1.29",
     "localforage": "^1.10.0",
-    "solid-js": "^1.4.2"
+    "solid-js": "^1.4.2",
+    "vite-plugin-checker": "^0.4.7"
   }
 }
