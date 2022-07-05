@@ -1,7 +1,7 @@
 
 
 General:
- - vite-checker typescript check goes in node_modules, see if there is any alternative to skipLibCheck
+ - https://www.brightec.co.uk/blog/svg-wouldnt-render - this?
  - commits need cleanup following unchecked fixups.
  - rename path to stroke?
  - Check those line smoothing functions:
