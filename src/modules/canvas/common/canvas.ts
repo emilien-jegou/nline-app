@@ -30,4 +30,9 @@ export class Canvas {
     delete this.entities[entity.id];
     return this;
   }
+
+  clear() {
+    Object.values(this.entities).forEach((entity) => entity.clear());
+    this.entities = {};
+  }
 }

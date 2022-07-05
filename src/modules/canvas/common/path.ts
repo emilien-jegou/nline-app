@@ -7,7 +7,8 @@ import { Canvas } from './canvas';
 import { getID } from './id';
 import { Position } from './position';
 
-const moveToPoint = ({ x, y }: Position) => `M${x},${y}`;
+const moveToPoint = ({ x, y }: Position) => `M ${x} ${y}`;
+//const lineToPoint = ({ x, y }: Position) => `L ${x} ${y}`;
 const cubicBezierToPoint = ({ x, y }: Position, { x: x2, y: y2 }: Position) => {
   const dx = x + (x2 - x) / 2;
   const dy = y + (y2 - y) / 2;
@@ -22,10 +23,10 @@ const d = (points: Position[]) => {
 
   return [
     moveToPoint(moveTo),
-    pipe(lineTo.slice(0, -1), zip(lineTo.slice(1))).map(([element, next]) =>
+    ...pipe(lineTo.slice(0, -1), zip(lineTo.slice(1))).map(([element, next]) =>
       cubicBezierToPoint(element, next),
     ),
-    //lineTo.slice(0, -1).map((elem) => lineToPoint(elem)),
+    //...lineTo.slice(0, -1).map((element) => lineToPoint(element)),
   ].join(' ');
 };
 
@@ -39,11 +40,15 @@ export class Path {
   private canvas: Option<Canvas> = O.none;
 
   constructor(points: Position[]) {
-    const domElement = document.createElement('path') as unknown as SVGPathElement;
+    const domElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path',
+    ) as unknown as SVGPathElement;
 
-    domElement.setAttribute('fill', 'white');
+    domElement.setAttribute('d', '');
+    domElement.setAttribute('fill', 'transparent');
     domElement.setAttribute('stroke', 'black');
-    domElement.setAttribute('stroke-width', '3');
+    domElement.setAttribute('stroke-width', '3px');
     domElement.dataset.SvgKey = this.id;
 
     this.domElement = domElement;
@@ -52,28 +57,40 @@ export class Path {
 
   static create = (points: Position[]) => new Path(points);
 
-  render() {
+  render(): Path {
     this.domElement.setAttributeNS(null, 'd', d(this.points));
+    return this;
   }
 
-  setCanvas(canvas: Option<Canvas>) {
+  clear() {
+    this.domElement.remove();
+  }
+
+  appendPoint(point: Position): Path {
+    this.points.push(point);
+    return this;
+  }
+
+  setCanvas(canvas: Option<Canvas>): Path {
     this.canvas = canvas;
     pipe(
       canvas,
       O.match(
         () => this.domElement.remove(),
-        ({ svgElement }) =>
+        (canvas) => {
           pipe(
-            svgElement,
+            canvas.svgElement,
             O.map((svgElement) => {
               const parentElement = this.domElement
                 .parentElement as unknown as SVGSVGElement | null;
-              if (svgElement === parentElement) {
+              if (svgElement !== parentElement) {
                 svgElement.append(this.domElement);
               }
             }),
-          ),
+          );
+        },
       ),
     );
+    return this;
   }
 }

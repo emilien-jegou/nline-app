@@ -9,8 +9,6 @@ type DrawingOverlayProps = {
   children: JSX.Element;
 };
 
-let lastMove = 0;
-
 /** Overlay over the canvas capturing the user click */
 export function MouseOverlay(props: DrawingOverlayProps) {
   return (
@@ -20,9 +18,13 @@ export function MouseOverlay(props: DrawingOverlayProps) {
       onClick={({ offsetX, offsetY }) => {
         props.overlayEventHandler.sendClick(Position.create(offsetX, offsetY));
       }}
+      onMouseDown={({ offsetX, offsetY }) => {
+        props.overlayEventHandler.sendMouseDown(Position.create(offsetX, offsetY));
+      }}
+      onMouseUp={({ offsetX, offsetY }) => {
+        props.overlayEventHandler.sendMouseUp(Position.create(offsetX, offsetY));
+      }}
       onMouseMove={({ offsetX, offsetY }) => {
-        if (Date.now() - lastMove < 2) return;
-        lastMove = Date.now();
         props.overlayEventHandler.sendMouseMove(Position.create(offsetX, offsetY));
       }}
     >

@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { some } from 'fp-ts/Option';
 
 import { MouseOverlay } from './components/MouseOverlay';
 import { OverlayEventHandler } from './common/overlay-event-handler';
@@ -9,31 +9,40 @@ import { Path } from './common/path';
 
 const CanvasComponent: Component = () => {
   const handler = OverlayEventHandler.create();
-  const [currentLine, setCurrentLine] = createStore<Position[]>([]);
 
   const canvas = Canvas.create();
-  const path = Path.create(currentLine);
 
-  canvas.addEntity(path);
+  handler.onMouseDown((position: Position) => {
+    const path = Path.create([position]).setCanvas(some(canvas));
 
-  handler.onMouseMove((position: Position) => setCurrentLine([...currentLine, position]));
+    const destroyMouseMove = handler.onMouseMove((position: Position) =>
+      path.appendPoint(position).render(),
+    );
+
+    const destroyMouseUp = handler.onMouseUp((position: Position) => {
+      path.appendPoint(position).render();
+      destroyMouseMove();
+      destroyMouseUp();
+    });
+  });
 
   return (
-    <>
+    <div>
       <button
         class="bg-black text-white p-2 border-white"
-        style={{ cursor: 'pointer' }}
-        onClick={() => setCurrentLine([])}
+        style={{ position: 'absolute', cursor: 'pointer' }}
+        onClick={() => canvas.clear()}
       >
         clear
       </button>
       <MouseOverlay overlayEventHandler={handler}>
         <svg
+          xmlns="http://www.w3.org/2000/svg"
           ref={(element: SVGSVGElement) => canvas.setSVGElement(element)}
           style={{ width: '100%', height: '100%' }}
         />
       </MouseOverlay>
-    </>
+    </div>
   );
 };
 
