@@ -1,19 +1,23 @@
 import type { Component } from 'solid-js';
-import { some } from 'fp-ts/Option';
 
 import { MouseOverlay } from './components/MouseOverlay';
 import { OverlayEventHandler } from './common/overlay-event-handler';
 import { Position } from './common/position';
 import { Canvas } from './common/canvas';
 import { Path } from './common/path';
+import { DebugMenu } from './components/DebugMenu';
+import { DebugItem } from './components/DebugItem';
+import { useSettings } from '../../stores/settings';
 
 const CanvasComponent: Component = () => {
   const handler = OverlayEventHandler.create();
+  const settings = useSettings();
 
   const canvas = Canvas.create();
 
   handler.onMouseDown((position: Position) => {
-    const path = Path.create([position]).setCanvas(some(canvas));
+    const path = Path.create([position]);
+    canvas.addEntity(path);
 
     const destroyMouseMove = handler.onMouseMove((position: Position) =>
       path.appendPoint(position).render(),
@@ -28,13 +32,9 @@ const CanvasComponent: Component = () => {
 
   return (
     <div>
-      <button
-        class="bg-black text-white p-2 border-white"
-        style={{ position: 'absolute', cursor: 'pointer' }}
-        onClick={() => canvas.clear()}
-      >
-        clear
-      </button>
+      <DebugMenu visible={settings.debugModeEnabled}>
+        <DebugItem onClick={() => canvas.clear()}>clear</DebugItem>
+      </DebugMenu>
       <MouseOverlay overlayEventHandler={handler}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
