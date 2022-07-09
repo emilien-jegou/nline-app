@@ -13,7 +13,7 @@ type DrawingOverlayProps = {
 export function MouseOverlay(props: DrawingOverlayProps) {
   return (
     <div
-      class="mt-4 ml-4 w-screen h-screen"
+      class="w-screen h-screen"
       style={{ cursor: getCursor(20) }}
       onClick={({ offsetX, offsetY }) => {
         props.overlayEventHandler.sendClick(Position.create(offsetX, offsetY));
