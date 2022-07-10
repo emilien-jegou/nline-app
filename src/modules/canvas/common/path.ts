@@ -6,6 +6,7 @@ import { pipe } from 'fp-ts/function';
 import { Canvas } from './canvas';
 import { getID } from './id';
 import { Position } from './position';
+import { ControlPoints } from './controlPoints';
 
 const moveToPoint = ({ x, y }: Position) => `M ${x} ${y}`;
 //const lineToPoint = ({ x, y }: Position) => `L ${x} ${y}`;
@@ -38,6 +39,7 @@ export class Path {
 
   points: Position[];
   private canvas: Option<Canvas> = O.none;
+  private controlPoints: Option<ControlPoints> = O.none;
 
   constructor(points: Position[]) {
     const domElement = document.createElementNS(
@@ -45,6 +47,7 @@ export class Path {
       'path',
     ) as unknown as SVGPathElement;
 
+    console.info(this);
     domElement.setAttribute('d', '');
     domElement.setAttribute('fill', 'transparent');
     domElement.setAttribute('stroke', 'black');
@@ -59,6 +62,10 @@ export class Path {
 
   render(): Path {
     this.domElement.setAttributeNS(null, 'd', d(this.points));
+    if (O.isSome(this.controlPoints)) {
+      console.info('?????????', O.none, this.controlPoints);
+      this.controlPoints.value.render();
+    }
     return this;
   }
 
@@ -92,5 +99,17 @@ export class Path {
       ),
     );
     return this;
+  }
+
+  showControlPoints(visible: boolean): void {
+    if (visible === true && O.isNone(this.controlPoints)) {
+      const controlPoints = ControlPoints.create(this);
+      console.info('>>>>>>>>>>', controlPoints);
+      controlPoints.render();
+      this.controlPoints = O.some(controlPoints);
+    } else if (visible === false && O.isSome(this.controlPoints)) {
+      this.controlPoints.value.clear();
+      this.controlPoints = O.none;
+    }
   }
 }

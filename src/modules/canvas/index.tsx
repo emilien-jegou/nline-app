@@ -7,12 +7,9 @@ import { Canvas } from './common/canvas';
 import { Path } from './common/path';
 import { DebugMenu } from './components/DebugMenu';
 import { DebugItem } from './components/DebugItem';
-import { useSettings } from '../../stores/settings';
 
 const CanvasComponent: Component = () => {
   const handler = OverlayEventHandler.create();
-  const settings = useSettings();
-
   const canvas = Canvas.create();
 
   handler.onMouseDown((position: Position) => {
@@ -32,8 +29,9 @@ const CanvasComponent: Component = () => {
 
   return (
     <div>
-      <DebugMenu visible={settings.debugModeEnabled}>
+      <DebugMenu visible={true}>
         <DebugItem onClick={() => canvas.clear()}>clear</DebugItem>
+        <DebugItem onClick={() => canvas.showControlPoints(true)}>show control points</DebugItem>
       </DebugMenu>
       <MouseOverlay overlayEventHandler={handler}>
         <svg

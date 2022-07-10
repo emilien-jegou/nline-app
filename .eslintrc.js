@@ -225,5 +225,7 @@ module.exports = {
 
     // remove rules
     'promise/always-return': 0,
+    '@typescript-eslint/no-empty-function': 0,
+
   },
 };

@@ -8,6 +8,7 @@ type EventTypes = 'onClick' | 'onMouseMove' | 'onMouseDown' | 'onMouseUp';
 export class OverlayEventHandler {
   private readonly logger = useLogger('OverlayEventHandler');
   private listeners: Partial<Record<EventTypes, EventEffect>> = {};
+  private lastMouseMoveTimestamp = 0;
 
   static create = () => new OverlayEventHandler();
 
@@ -24,6 +25,9 @@ export class OverlayEventHandler {
   }
 
   sendMouseMove(position: Position) {
+    const currentDate = Date.now();
+    if (currentDate - this.lastMouseMoveTimestamp < 10) return;
+    this.lastMouseMoveTimestamp = currentDate;
     this.sendEvent('onMouseMove', position);
   }
 

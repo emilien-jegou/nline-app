@@ -22,7 +22,7 @@ const settingsStorageKey = 'settings';
 
 export function SettingsProvider(props: { children: JSX.Element }): JSX.Element {
   const logger = useLogger('settings');
-  const [settings, setSettings] = createStore<SettingsStore>(none);
+  const [settings, setSettings] = createStore<SettingsStore>(Object.assign({}, none));
 
   onMount(() => {
     storage

@@ -12,10 +12,6 @@ export function DebugItem(props: DebugItemProps) {
       style={{
         'user-select': 'none',
         cursor: 'pointer',
-        // TODO: (@emilien) [2022-07-10] hover marquee
-        //'&:hover': {
-        //animation: 'marquee 5s linear infinite',
-        //},
       }}
       onClick={() => props.onClick()}
     >

@@ -35,4 +35,8 @@ export class Canvas {
     Object.values(this.entities).forEach((entity) => entity.clear());
     this.entities = {};
   }
+
+  showControlPoints(visible: boolean) {
+    Object.values(this.entities).forEach((entity) => entity.showControlPoints(visible));
+  }
 }
