@@ -7,6 +7,7 @@ import { Canvas } from './canvas';
 import { getID } from './id';
 import { Position } from './position';
 import { ControlPoints } from './controlPoints';
+import { Entity } from './entity';
 
 const moveToPoint = ({ x, y }: Position) => `M ${x} ${y}`;
 //const lineToPoint = ({ x, y }: Position) => `L ${x} ${y}`;
@@ -31,7 +32,7 @@ const d = (points: Position[]) => {
   ].join(' ');
 };
 
-export class Path {
+export class Path extends Entity {
   domElement: SVGPathElement;
 
   readonly _entityType = self.name;
@@ -42,6 +43,7 @@ export class Path {
   private controlPoints: Option<ControlPoints> = O.none;
 
   constructor(points: Position[]) {
+    super();
     const domElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'path',
@@ -69,36 +71,20 @@ export class Path {
     return this;
   }
 
-  clear() {
-    this.domElement.remove();
-  }
-
   appendPoint(point: Position): Path {
     this.points.push(point);
     return this;
   }
 
-  setCanvas(canvas: Option<Canvas>): Path {
-    this.canvas = canvas;
-    pipe(
-      canvas,
-      O.match(
-        () => this.domElement.remove(),
-        (canvas) => {
-          pipe(
-            canvas.svgElement,
-            O.map((svgElement) => {
-              const parentElement = this.domElement
-                .parentElement as unknown as SVGSVGElement | null;
-              if (svgElement !== parentElement) {
-                svgElement.append(this.domElement);
-              }
-            }),
-          );
-        },
-      ),
-    );
-    return this;
+  removeNode() {
+    this.domElement.remove();
+  }
+
+  addNode(parentElement: SVGSVGElement) {
+    const currentParentElement = this.domElement.parentElement as unknown as SVGSVGElement | null;
+    if (currentParentElement !== parentElement) {
+      parentElement.append(this.domElement);
+    }
   }
 
   showControlPoints(visible: boolean): void {

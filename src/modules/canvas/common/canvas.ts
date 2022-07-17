@@ -32,7 +32,7 @@ export class Canvas {
   }
 
   clear() {
-    Object.values(this.entities).forEach((entity) => entity.clear());
+    Object.values(this.entities).forEach((entity) => entity.removeNode());
     this.entities = {};
   }
 
